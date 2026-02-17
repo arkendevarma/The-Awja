@@ -41,11 +41,6 @@ section {
   text-align: center;
 }
 
-.hero {
-  background: url('images/hero.jpg') center/cover;
-  padding: 100px 20px;
-}
-
 button {
   background: gold;
   border: none;
@@ -53,6 +48,7 @@ button {
   cursor: pointer;
   font-weight: bold;
   margin: 5px;
+  border-radius: 6px;
 }
 
 .gallery img {
@@ -61,10 +57,28 @@ button {
   border-radius: 10px;
 }
 
+.review-box {
+  background: #123d31;
+  padding: 20px;
+  margin: 20px;
+  border-radius: 12px;
+}
+
+.review-box img {
+  width: 180px;
+  border-radius: 10px;
+}
+
+.social a {
+  color: gold;
+  margin: 10px;
+  font-size: 18px;
+  text-decoration: none;
+}
+
 footer {
   background: black;
   padding: 20px;
-  text-align: center;
 }
 
 .map iframe {
@@ -80,63 +94,88 @@ footer {
 <header>
   <img src="images/logo.png">
   <h1>THE AWJA</h1>
-  <p>“In Nature We Believe”</p>
+  <p>In Nature We Believe</p>
 </header>
 
 <nav>
   <a href="#about">About</a>
   <a href="#menu">Menu</a>
-  <a href="#gallery">Gallery</a>
+  <a href="#reviews">Reviews</a>
   <a href="#contact">Contact</a>
 </nav>
 
-<section class="hero">
-  <h2>The Farmhouse Restaurant</h2>
-  <button onclick="window.location.href='tel:+919612423387'">Call Now</button>
-  <button onclick="window.location.href='menu.pdf'">View Menu</button>
-</section>
-
 <section id="about">
-  <h2>About Us</h2>
-  <p>The Awja is a nature-inspired farmhouse restaurant in Agartala.
-  Enjoy peaceful ambience, delicious food and family friendly dining.</p>
+<h2>About The Awja</h2>
+<p>
+Awja is an expanding brand with a leading interest in premium food, beverages 
+and eco-friendly products. Awja guarantees to have an influence and essence of 
+nature in its products. It is an elegant resort set up by Mrs Chaitali Chakma, 
+with an excellent banquet and a variety of food and beverage choices.  
+Under her leadership, the team works with perfect coordination to bring unique 
+delicacies right onto your plates. Awja aims to be more sustainable towards the 
+environment by taking small steps such as eco-friendly crockery and solar panels 
+to reduce fossil fuel use, with many more sustainable initiatives planned.
+</p>
 </section>
 
 <section id="menu">
-  <h2>Our Menu</h2>
-  <p>Starters • Main Course • Rice • Breads • Beverages</p>
-  <button onclick="window.location.href='menu.pdf'">Open Full Menu PDF</button>
+<h2>Menu Highlights</h2>
+<p>Chicken Fried Rice • Chicken Thali • Momos • Pork Hot Pot • French Fries • Lemon Tea</p>
+<button onclick="window.location.href='menu.pdf'">View Full Menu</button>
 </section>
 
-<section id="gallery" class="gallery">
-  <h2>Gallery</h2>
-  <img src="images/food1.jpg">
-  <img src="images/food2.jpg">
-  <img src="images/restaurant.jpg">
+<section class="gallery">
+<h2>Food Gallery</h2>
+<img src="images/food1.jpg">
+<img src="images/food2.jpg">
+<img src="images/restaurant.jpg">
 </section>
 
-<section>
-  <h2>Reviews</h2>
-  <p>⭐ 3.8 Rating (600+ Reviews)</p>
-  <p>“Staff behaviour is too good also food quality and atmosphere is great”</p>
+<section id="reviews">
+<h2>Customer Reviews ⭐ 3.8 (600+)</h2>
+
+<div class="review-box">
+<img src="images/review1.jpg">
+<p>⭐⭐⭐⭐☆</p>
+<p>"Staff behaviour is too good also food quality and atmosphere is great."</p>
+</div>
+
+<div class="review-box">
+<img src="images/review2.jpg">
+<p>⭐⭐⭐⭐☆</p>
+<p>"Nice natural ambience and peaceful environment. Best place to visit."</p>
+</div>
+
+<div class="review-box">
+<img src="images/review3.jpg">
+<p>⭐⭐⭐☆☆</p>
+<p>"Food is good but space is small but overall good experience."</p>
+</div>
+
 </section>
 
 <section class="map">
-  <h2>Location</h2>
-  <iframe src="https://www.google.com/maps?q=The+Awja+Agartala&output=embed"></iframe>
+<h2>Location</h2>
+<iframe src="https://www.google.com/maps?q=The+Awja+Agartala&output=embed"></iframe>
 </section>
 
 <section id="contact">
-  <h2>Contact</h2>
-  <p>📞 +91 96124 23387</p>
-  <p>🕒 Open Till 10 PM</p>
-  <button onclick="window.location.href='https://wa.me/919612423387'">
-    WhatsApp Booking
-  </button>
+<h2>Contact</h2>
+<p>📞 +91 96124 23387</p>
+<button onclick="window.location.href='https://wa.me/919612423387'">
+WhatsApp Booking
+</button>
+
+<div class="social">
+<h3>Follow Us</h3>
+<a href="https://www.instagram.com/theawja/" target="_blank">Instagram</a> |
+<a href="https://www.facebook.com/theawja/" target="_blank">Facebook</a>
+</div>
+
 </section>
 
 <footer>
-  <p>© 2026 The Awja Restaurant</p>
+<p>© 2026 The Awja Restaurant</p>
 </footer>
 
 </body>
