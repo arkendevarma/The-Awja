@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWJA Order System</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#0f3b2e;
+color:white;
+}
+
+header{
+background:#09251c;
+padding:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+position:sticky;
+top:0;
+z-index:1000;
+}
+
+h1{color:#ffcc00;}
+
+.cart-btn{
+background:#ffcc00;
+border:none;
+padding:10px 15px;
+cursor:pointer;
+font-weight:bold;
+border-radius:5px;
+}
+
+section{
+padding:30px;
+}
+
+.category{
+margin-bottom:50px;
+}
+
+.category img{
+width:100%;
+max-height:250px;
+object-fit:cover;
+border-radius:10px;
+margin-bottom:20px;
+}
+
+.menu-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px;
+border-bottom:1px solid rgba(255,255,255,0.2);
+}
+
+.menu-item button{
+background:#ffcc00;
+border:none;
+padding:6px 10px;
+cursor:pointer;
+font-weight:bold;
+border-radius:4px;
+}
+
+.cart{
+position:fixed;
+right:-400px;
+top:0;
+width:350px;
+height:100%;
+background:#111;
+padding:20px;
+overflow:auto;
+transition:0.4s;
+box-shadow:-5px 0 15px rgba(0,0,0,0.5);
+}
+
+.cart.active{
+right:0;
+}
+
+.cart-item{
+display:flex;
+justify-content:space-between;
+margin-bottom:8px;
+}
+
+input,select{
+width:100%;
+padding:8px;
+margin-bottom:10px;
+}
+
+.confirm-box{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:#111;
+padding:30px;
+display:none;
+border-radius:10px;
+box-shadow:0 0 20px black;
+}
+
+@media(max-width:768px){
+.menu-item{
+flex-direction:column;
+align-items:flex-start;
+}
+.cart{
+width:100%;
+}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>AWJA Order Now</h1>
+<button class="cart-btn" onclick="toggleCart()">
+Cart (<span id="cart-count">0</span>)
+</button>
+</header>
+
+<section id="menu-container"></section>
+
+<div class="cart" id="cart">
+<h2>Your Cart</h2>
+<div id="cart-items"></div>
+<h3>Total: ₹<span id="total">0</span></h3>
+
+<input type="text" id="name" placeholder="Your Name">
+<input type="tel" id="mobile" placeholder="Mobile Number">
+
+<select id="payment">
+<option value="">Select Payment</option>
+<option>UPI</option>
+<option>Cash</option>
+</select>
+
+<button onclick="placeOrder()">Confirm Order</button>
+</div>
+
+<div class="confirm-box" id="confirmBox">
+<h2>Order Confirmed 🎉</h2>
+<p id="orderDetails"></p>
+<button onclick="closeConfirm()">Close</button>
+</div>
+
+<script>
+
+const menuData={
+"Starters":[["Chicken Lollipop",190],["Pork Pakora",230]],
+"Veg":[["Dal Fry",140],["Paneer Butter Masala",250]],
+"Chicken":[["Chilli Chicken",240],["Roasted Chicken",300]]
+};
+
+let cart=[];
+
+function loadMenu(){
+let container=document.getElementById("menu-container");
+for(let category in menuData){
+container.innerHTML+=`<div class="category">
+<h2>${category}</h2>
+${menuData[category].map(item=>`
+<div class="menu-item">
+<span>${item[0]} - ₹${item[1]}</span>
+<button onclick="addToCart('${item[0]}',${item[1]})">Add</button>
+</div>
+`).join("")}
+</div>`;
+}
+}
+loadMenu();
+
+function addToCart(name,price){
+let found=cart.find(i=>i.name===name);
+if(found){found.qty++;}
+else{cart.push({name,price,qty:1});}
+updateCart();
+}
+
+function updateCart(){
+let items=document.getElementById("cart-items");
+items.innerHTML="";
+let total=0;
+cart.forEach((item,index)=>{
+total+=item.price*item.qty;
+items.innerHTML+=`
+<div class="cart-item">
+<span>${item.name} x${item.qty}</span>
+<button onclick="removeItem(${index})">X</button>
+</div>`;
+});
+document.getElementById("total").innerText=total;
+document.getElementById("cart-count").innerText=cart.length;
+}
+
+function removeItem(index){
+cart.splice(index,1);
+updateCart();
+}
+
+function toggleCart(){
+document.getElementById("cart").classList.toggle("active");
+}
+
+function placeOrder(){
+let name=document.getElementById("name").value;
+let mobile=document.getElementById("mobile").value;
+if(!name||!mobile||cart.length===0){
+alert("Complete details first");
+return;
+}
+let orderId="AWJA"+Math.floor(Math.random()*10000);
+let total=document.getElementById("total").innerText;
+
+document.getElementById("orderDetails").innerHTML=
+`Order ID: ${orderId}<br>Name: ${name}<br>Total: ₹${total}`;
+
+document.getElementById("confirmBox").style.display="block";
+cart=[];
+updateCart();
+toggleCart();
+}
+
+function closeConfirm(){
+document.getElementById("confirmBox").style.display="none";
+}
+
+</script>
+
+</body>
+</html>
