@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWJA Full Menu</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#0f3b2e;
+color:white;
+}
+
+header{
+background:#0b2e23;
+padding:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+header h1{
+color:#ffcc00;
+}
+
+.cart-btn{
+background:#ffcc00;
+padding:10px 15px;
+border:none;
+cursor:pointer;
+font-weight:bold;
+}
+
+section{
+padding:30px;
+}
+
+.category img{
+width:100%;
+max-height:250px;
+object-fit:cover;
+border-radius:10px;
+margin-bottom:20px;
+}
+
+.menu-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px;
+border-bottom:1px solid rgba(255,255,255,0.2);
+}
+
+button{
+background:#ffcc00;
+border:none;
+padding:6px 10px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.cart{
+position:fixed;
+right:-400px;
+top:0;
+width:350px;
+height:100%;
+background:#111;
+padding:20px;
+overflow:auto;
+transition:0.4s;
+}
+
+.cart.active{
+right:0;
+}
+
+input, select{
+width:100%;
+padding:8px;
+margin-top:8px;
+margin-bottom:10px;
+}
+
+.upi{
+display:none;
+text-align:center;
+}
+
+.upi img{
+width:200px;
+margin-top:10px;
+}
+
+@media(max-width:768px){
+.menu-item{
+flex-direction:column;
+align-items:flex-start;
+}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>AWJA MENU</h1>
+<button class="cart-btn" onclick="toggleCart()">Cart (<span id="cart-count">0</span>)</button>
+</header>
+
+<!-- STARTERS -->
+<section class="category">
+<h2>Starters</h2>
+<img src="images/starters.jpg">
+<div id="starters"></div>
+</section>
+
+<!-- VEG -->
+<section class="category">
+<h2>Main Course Vegetarian</h2>
+<img src="images/veg.jpg">
+<div id="veg"></div>
+</section>
+
+<!-- CHICKEN -->
+<section class="category">
+<h2>Main Course Chicken</h2>
+<img src="images/chicken.jpg">
+<div id="chicken"></div>
+</section>
+
+<!-- EGG -->
+<section class="category">
+<h2>Main Course Egg</h2>
+<img src="images/egg.jpg">
+<div id="egg"></div>
+</section>
+
+<!-- PORK -->
+<section class="category">
+<h2>Main Course Pork</h2>
+<img src="images/pork.jpg">
+<div id="pork"></div>
+</section>
+
+<!-- RICE -->
+<section class="category">
+<h2>Rice</h2>
+<img src="images/rice.jpg">
+<div id="rice"></div>
+</section>
+
+<!-- BREADS -->
+<section class="category">
+<h2>Breads</h2>
+<img src="images/breads.jpg">
+<div id="breads"></div>
+</section>
+
+<!-- BEVERAGES -->
+<section class="category">
+<h2>Beverages</h2>
+<img src="images/beverages.jpg">
+<div id="beverages"></div>
+</section>
+
+<!-- CART -->
+<div class="cart" id="cart">
+<h2>Your Cart</h2>
+<div id="cart-items"></div>
+<h3>Total: ₹<span id="total">0</span></h3>
+
+<h3>Customer Details</h3>
+<input type="text" id="name" placeholder="Your Name" autocomplete="name">
+<input type="tel" id="mobile" placeholder="Mobile Number" autocomplete="tel">
+
+<select id="payment" onchange="showUPI()">
+<option value="">Select Payment Method</option>
+<option value="UPI">UPI (Scan QR)</option>
+<option value="Cash">Cash</option>
+</select>
+
+<div class="upi" id="upi-section">
+<p>Scan to Pay</p>
+<img src="images/upi-qr.jpg">
+</div>
+
+<button onclick="placeOrder()">Confirm Order</button>
+</div>
+
+<script>
+
+const menuData = {
+starters:[
+["Mixed Veg Pakora",90],
+["Egg Pakora",140],
+["Chicken Lollipop",190],
+["Pork Pakora",230],
+["Paneer Skewers",170],
+["Chicken Wings Cheese Crunch",220],
+["Steam Chicken Momo",100],
+["Fried Chicken Momo",130]
+],
+veg:[
+["Dal Fry",140],
+["Mixed Veg Sabjee",180],
+["Chilli Paneer",210],
+["Paneer Butter Masala",250],
+["Palak Paneer",230],
+["Mushroom Corn Masala",210]
+],
+chicken:[
+["Chicken Stew",240],
+["Chilli Chicken",240],
+["Chicken Gravy",260],
+["Chicken Butter Masala",300],
+["Kadai Chicken",280],
+["Roasted Chicken",300]
+],
+egg:[
+["Plain Egg Omelette",90],
+["Egg Burji",90],
+["Egg Gravy",110],
+["Egg Dry Fry",130]
+],
+pork:[
+["Pork Stew",290],
+["Pork Kosha",310],
+["Pork Dry Fry",310],
+["Smokey Pork Curry",350]
+],
+rice:[
+["Plain Rice",110],
+["Jeera Rice",120],
+["Veg Fried Rice",140],
+["Chicken Fried Rice",220],
+["Mixed Fried Rice",300]
+],
+breads:[
+["Plain Roti",10],
+["Butter Roti",15],
+["Plain Paratha",20],
+["Paneer Paratha",50]
+],
+beverages:[
+["Fresh Lime Juice",110],
+["Orange Juice",140],
+["Milk Tea",40],
+["Cold Coffee",80],
+["Oreo Shake",100]
+]
+};
+
+let cart=[];
+function loadMenu(){
+for(let category in menuData){
+let container=document.getElementById(category);
+menuData[category].forEach(item=>{
+container.innerHTML+=`
+<div class="menu-item">
+<span>${item[0]} - ₹${item[1]}</span>
+<button onclick="addToCart('${item[0]}',${item[1]})">Add</button>
+</div>`;
+});
+}
+}
+loadMenu();
+
+function addToCart(name,price){
+cart.push({name,price});
+updateCart();
+}
+
+function updateCart(){
+let cartItems=document.getElementById("cart-items");
+cartItems.innerHTML="";
+let total=0;
+cart.forEach(item=>{
+cartItems.innerHTML+=`<p>${item.name} - ₹${item.price}</p>`;
+total+=item.price;
+});
+document.getElementById("total").innerText=total;
+document.getElementById("cart-count").innerText=cart.length;
+}
+
+function toggleCart(){
+document.getElementById("cart").classList.toggle("active");
+}
+
+function showUPI(){
+let pay=document.getElementById("payment").value;
+document.getElementById("upi-section").style.display=
+pay==="UPI"?"block":"none";
+}
+
+function placeOrder(){
+let name=document.getElementById("name").value;
+let mobile=document.getElementById("mobile").value;
+let payment=document.getElementById("payment").value;
+
+if(!name || !mobile || cart.length===0){
+alert("Please complete details and add items");
+return;
+}
+
+let orderId="AWJA"+Math.floor(Math.random()*10000);
+let total=document.getElementById("total").innerText;
+
+let message=`Order ID: ${orderId}
+Name: ${name}
+Mobile: ${mobile}
+Payment: ${payment}
+Total: ₹${total}
+
+Items:
+`;
+
+cart.forEach(item=>{
+message+=`${item.name} - ₹${item.price}\n`;
+});
+
+window.open(`https://wa.me/91YOURNUMBER?text=${encodeURIComponent(message)}`);
+
+alert("Order Sent Successfully!");
+cart=[];
+updateCart();
+toggleCart();
+}
+
+</script>
+
+</body>
+</html>
